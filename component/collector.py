@@ -50,7 +50,7 @@ class NotificationDelegate(btle.DefaultDelegate):
 
 
 class Collector:
-	def __init__(self, mac, sensors):
+	def __init__(self, mac, sensors, publisher):
 		try:
 			self._log = tinylog('Collector')
 			self._connected = False
@@ -80,7 +80,7 @@ class Collector:
 
 			for name in sensors:
 				unit = sensors[name]['unit']
-				s = Sensor(self._thingy, name, unit)
+				s = Sensor(self._thingy, name, unit, publisher)
 				self.sensors.append(s)
 				self._log.inf('Configured sensor: {}'.format(s))
 
@@ -95,7 +95,7 @@ class Collector:
 
 	@property
 	def sensors(self):
-		return self._sensors
+		return self.sensors
 
 	@property
 	def connected(self):

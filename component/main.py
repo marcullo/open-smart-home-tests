@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from tinylog import tinylog
 from collector import Collector
+from publisher import Publisher
 import json
 
 
@@ -9,7 +10,8 @@ def load_secrets():
 	with open('.secrets') as f:
 		secrets = json.load(f)
 		mac = secrets['MAC']
-		return mac
+		mqtt_params = secrets['MQTT']
+		return mac, mqtt_params
 
 
 def load_config():
@@ -18,12 +20,15 @@ def load_config():
 
 
 def run():
-	mac = load_secrets()
+	mac, mqtt_params = load_secrets()
 	sensors = load_config()
 
-	collector = Collector(mac, sensors)
+	publisher = Publisher(mqtt_params)
+	collector = Collector(mac, sensors, publisher)
 	if not collector.connected:
 		return
+
+	publisher.loop_start()
 	
 	while True:
 		collector.collect()
