@@ -1,0 +1,18 @@
+{
+	"sensors": {
+		"temperature":{
+			"unit": "deg. C",
+			"interval": 5000
+		},
+
+		"humidity": {
+			"unit": "%",
+			"interval": 10000
+		},
+
+		"pressure": {
+			"unit": "hPa",
+			"interval": 15000
+		}
+	}
+}
