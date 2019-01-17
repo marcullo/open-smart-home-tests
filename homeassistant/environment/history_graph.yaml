@@ -1,0 +1,12 @@
+  temperature_inside:
+    name: "Dom: temperatura"
+    entities:
+      - sensor.temperatura
+    refresh: 5
+
+  humidity_inside:
+    name: "Dom: wilgotność"
+    entities:
+      - sensor.wilgotnosc
+    refresh: 5
+

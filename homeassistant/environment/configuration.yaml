@@ -1,0 +1,35 @@
+homeassistant:
+    name: Home
+    latitude: !secret secret_latitude
+    longitude: !secret secret_longitude
+    elevation: 0
+    unit_system: metric
+    time_zone: Europe/Warsaw
+    customize: !include customize.yaml
+
+http:
+#    ssl_certificate: /home/your_user/.homeassistant/hass.pem
+#    ssl_key: /home/your_user/.homeassistant/priv_hass.pem
+#    base_url: example.duckdns.org:8123
+
+mqtt:
+  broker: !secret secret_mqtt_broker
+
+cloud:
+frontend:
+config:
+updater:
+discovery:
+conversation:
+history:
+history_graph: !include history_graph.yaml
+logbook:
+map:
+sun:
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+sensor: !include sensor.yaml
+
+tts:
+    - platform: google
