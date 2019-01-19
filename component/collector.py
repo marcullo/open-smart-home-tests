@@ -50,10 +50,11 @@ class NotificationDelegate(btle.DefaultDelegate):
 
 
 class Collector:
-	def __init__(self, mac, sensors):
+	def __init__(self, mac, sensors, publisher):
 		try:
 			self._log = tinylog('Collector')
 			self._connected = False
+                        self._publisher = publisher
 			self.sensors = []
 
 			self._log.inf('Connecting to {}'.format(mac))
@@ -80,7 +81,7 @@ class Collector:
 
 			for name in sensors:
 				unit = sensors[name]['unit']
-				s = Sensor(self._thingy, name, unit)
+				s = Sensor(self._thingy, name, unit, publisher)
 				self.sensors.append(s)
 				self._log.inf('Configured sensor: {}'.format(s))
 
@@ -95,7 +96,7 @@ class Collector:
 
 	@property
 	def sensors(self):
-		return self._sensors
+		return self.sensors
 
 	@property
 	def connected(self):
@@ -104,6 +105,17 @@ class Collector:
 	def collect(self):
 		try:
 			self._thingy.waitForNotifications(timeout=5)
+                        try:
+                            to_pub = {
+                                'idx': 1,
+                                'nvalue': 0,
+                                'svalue': '{};{};0;{};0'.format(
+                                    self.sensors[0].value, self.sensors[1].value, self.sensors[2].value
+                                )
+                            }
+                            #self._publisher.publish('in', json.dumps(to_pub))
+                        except:
+                            pass
 		except (KeyboardInterrupt, SystemExit) as ex:
 			if self._thingy is not None:
 				self._log.inf('Disconnecting')
